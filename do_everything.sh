@@ -3,6 +3,8 @@
 # Abort script on any failures
 set -e
 
+export PLATFORM=x86
+
 # Define the number of simultaneous jobs to trigger for the different
 # tasks that allow it. Use the number of available processors in the
 # system.
@@ -191,6 +193,8 @@ if [[ $skip -ne 1 ]] ; then
 
     # Patch log4cxx - Add missing headers
     apply_patch $my_loc/patches/log4cxx.patch
+
+    apply_patch $my_loc/patches/libxml2.patch
 
     # Patch fcl - Add ccd library cmake variables
     # TODO: The correct way to handle this would be to create .cmake files for ccd and do a findpackage(ccd)

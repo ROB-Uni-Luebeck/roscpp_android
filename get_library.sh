@@ -35,7 +35,8 @@ elif [ $1 == 'catkin' ]; then
     URL='-b 0.6.5 https://github.com/ros/catkin.git'
     COMP='git'
 elif [ $1 == 'collada_dom' ]; then
-    URL=http://ufpr.dl.sourceforge.net/project/collada-dom/Collada%20DOM/Collada%20DOM%202.4/collada-dom-2.4.0.tgz
+    # URL=http://ufpr.dl.sourceforge.net/project/collada-dom/Collada%20DOM/Collada%20DOM%202.4/collada-dom-2.4.0.tgz
+    URL=https://downloads.sourceforge.net/project/collada-dom/Collada%20DOM/Collada%20DOM%202.4/collada-dom-2.4.0.tgz
     COMP='gz'
 elif [ $1 == 'console_bridge' ]; then
     URL=https://github.com/ros/console_bridge.git
@@ -122,7 +123,10 @@ fi
 
 if [ $1 == 'boost' ]; then
     cd $prefix/boost
-    ./build-android.sh $ANDROID_NDK --boost=1.53.0
+    if [ $PLATFORM == 'x86' ]; then
+        apply_patch $my_loc/patches/boost.patch
+    fi
+    ./build-android.sh --toolchain=$toolchain $ANDROID_NDK --boost=1.53.0
 elif [ -v HASH ]; then
     cd $prefix/$1
     git checkout $HASH
@@ -132,4 +136,8 @@ elif [ $1 == 'orocos_kdl' ]; then
     mv $prefix/orocos-kdl-release-release-indigo-orocos_kdl-1.3.0-0 $prefix/orocos_kdl-1.3.0
 elif [ $1 == 'fcl' ]; then
     mv $prefix/fcl-release-release-indigo-fcl-0.3.2-0 $prefix/fcl-0.3.2
+elif [ $1 == 'libxml2' ]; then
+    cd $prefix/libxml2-2.9.1
+    wget https://raw.githubusercontent.com/white-gecko/TokyoCabinet/master/glob.c
+    wget https://raw.githubusercontent.com/white-gecko/TokyoCabinet/master/glob.h   
 fi

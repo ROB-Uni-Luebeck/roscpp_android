@@ -1,6 +1,13 @@
 system=$(uname -s | tr 'DL' 'dl')-$(uname -m)
 gcc_version=4.6
-toolchain=arm-linux-androideabi-$gcc_version
+if [[ ${PLATFORM} == "arm" ]] ; then
+    toolchain=arm-linux-androideabi-$gcc_version
+    export host_system=arm-linux-androideabi
+fi
+if [[ ${PLATFORM} == "x86" ]] ; then
+    toolchain=x86-$gcc_version
+    export host_system=i686-linux-android
+fi
 platform=android-14
 PYTHONPATH=/opt/ros/indigo/lib/python2.7/dist-packages:$PYTHONPATH
 # Enable this value for debug build
