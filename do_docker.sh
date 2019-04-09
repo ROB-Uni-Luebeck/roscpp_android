@@ -9,6 +9,10 @@ del_image=0
 del_tmp=0
 portable=0
 standard=0
+enter=0
+
+# docker_img=ekumenlabs/rosndk
+docker_img=rosndk
 
 if [[ $# -lt 1 ]] ; then
     standard=1
@@ -26,6 +30,10 @@ do
 
     if [[ ${var} == "--delete-tmp" ]] ; then
         del_tmp=1
+    fi
+
+    if [[ ${var} == "--enter" ]] ; then
+        enter=1
     fi
 
     if [[ ${var} == "--portable" ]] ; then
@@ -56,7 +64,7 @@ if [[ $del_image -eq 1 ]]; then
   echo
   echo -e '\e[34mDeleting docker image.\e[39m'
   echo
-  docker rmi -f ekumenlabs/rosndk
+  docker rmi -f $docker_img
   exit $?
 fi
 
@@ -76,21 +84,26 @@ echo
 cmd_exists docker || die 'docker was not found'
 
 echo -e '\e[34mPulling base docker image.\e[39m'
-docker pull ekumenlabs/rosndk
+# docker pull ekumenlabs/rosndk
 
+if [[ $enter -eq 1 ]]; then
+  echo -e '\e[34mSetting output_path to: '$output_path'.\e[39m'
+  echo
+  docker run --rm=true -t -v $my_loc:/opt/roscpp_android -v $output_path:/opt/roscpp_output -i $docker_img /bin/bash
+  exit $?
+fi
 
 if [[ $standard -eq 1 ]]; then
   echo -e '\e[34mSetting output_path to: '$output_path'.\e[39m'
   echo
-  docker run --rm=true -t -v $my_loc:/opt/roscpp_android -v $output_path:/opt/roscpp_output -i ekumenlabs/rosndk /opt/roscpp_android/do_everything.sh /opt/roscpp_output
-  # docker run --rm=true -t -v $my_loc:/opt/roscpp_android -v $output_path:/opt/roscpp_output -i ekumenlabs/rosndk /bin/bash
+  docker run --rm=true -t -v $my_loc:/opt/roscpp_android -v $output_path:/opt/roscpp_output -i $docker_img /opt/roscpp_android/do_everything.sh /opt/roscpp_output
   exit $?
 fi
 
 if [[ $portable -eq 1 ]]; then
   echo -e '\e[34mBuilding in portable mode.\e[39m'
   echo
-  docker run --rm=true -t -v $my_loc:/opt/roscpp_android -v $output_path:/opt/roscpp_output -i ekumenlabs/rosndk /opt/roscpp_android/do_everything.sh /opt/roscpp_output --portable
+  docker run --rm=true -t -v $my_loc:/opt/roscpp_android -v $output_path:/opt/roscpp_output -i $docker_img /opt/roscpp_android/do_everything.sh /opt/roscpp_output --portable
   echo
   echo -e '\e[34mCreating output/roscpp_android_ndk.tar.gz.\e[39m'
   echo

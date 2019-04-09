@@ -126,6 +126,11 @@ if [ $1 == 'boost' ]; then
     if [ $PLATFORM == 'x86' ]; then
         apply_patch $my_loc/patches/boost.patch
     fi
+    if [ $PLATFORM == 'x86_64' ]; then
+	cp $prefix/$1/build-android.sh $prefix/$1/build-android.sh.orig
+        apply_patch $my_loc/patches/boost_x64.patch
+        apply_patch $my_loc/patches/boost_x64_2.patch
+    fi
     ./build-android.sh --toolchain=$toolchain $ANDROID_NDK --boost=1.53.0
 elif [ -v HASH ]; then
     cd $prefix/$1
@@ -136,6 +141,8 @@ elif [ $1 == 'orocos_kdl' ]; then
     mv $prefix/orocos-kdl-release-release-indigo-orocos_kdl-1.3.0-0 $prefix/orocos_kdl-1.3.0
 elif [ $1 == 'fcl' ]; then
     mv $prefix/fcl-release-release-indigo-fcl-0.3.2-0 $prefix/fcl-0.3.2
+elif [ $1 == 'uuid' ]; then
+    apply_patch $my_loc/patches/uuid.patch
 elif [ $1 == 'libxml2' ]; then
     cd $prefix/libxml2-2.9.1
     wget https://raw.githubusercontent.com/white-gecko/TokyoCabinet/master/glob.c

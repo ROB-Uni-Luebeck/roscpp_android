@@ -3,7 +3,7 @@
 # Abort script on any failures
 set -e
 
-export PLATFORM=x86
+export PLATFORM=x86_64
 
 # Define the number of simultaneous jobs to trigger for the different
 # tasks that allow it. Use the number of available processors in the

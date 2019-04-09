@@ -148,7 +148,7 @@
 +} // namespace Poco
 --- /dev/null
 +++ libs/poco-1.6.1/build/config/Android_static
-@@ -0,0 +1,91 @@
+@@ -0,0 +1,96 @@
 +#
 +# $Id: //poco/1.4/build/config/Android#3 $
 +#
@@ -178,7 +178,12 @@
 +TOOL      = i686-linux-android
 +ARCHFLAGS = -march=i686 -msse3 -mstackrealign -mfpmath=sse
 +else
++ifeq ($(ANDROID_ABI),x86_64)
++TOOL      = x86_64-linux-android
++ARCHFLAGS = -msse3 -mstackrealign -mfpmath=sse
++else
 +$(error Invalid ABI specified in ANDROID_ABI)
++endif
 +endif
 +endif
 +endif
@@ -240,3 +245,14 @@
 +# System Specific Libraries
 +#
 +SYSLIBS  = -lstdc++ -lsupc++
+--- libs/poco-1.6.1/Foundation/src/Process_UNIX.cpp	2019-04-08 22:26:34.736541231 +0200
++++ libs/poco-1.6.1/Foundation/src/Process_UNIX.cpp	2019-04-08 22:27:05.768533129 +0200
+@@ -200,7 +200,7 @@
+ 		if (outPipe) outPipe->close(Pipe::CLOSE_BOTH);
+ 		if (errPipe) errPipe->close(Pipe::CLOSE_BOTH);
+ 		// close all open file descriptors other than stdin, stdout, stderr
+-		for (int i = 3; i < getdtablesize(); ++i)
++		for (int i = 3; i < sysconf(_SC_OPEN_MAX); ++i)
+ 		{
+ 			close(i);
+ 		}

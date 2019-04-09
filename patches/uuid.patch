@@ -1,0 +1,11 @@
+--- uuid/include/uuid/uuid_types.h	2019-04-08 22:05:02.712807473 +0200
++++ uuid/include/uuid/uuid_types.h	2019-04-08 22:09:34.552772932 +0200
+@@ -3,7 +3,7 @@
+  * everything we need.  (cross fingers)  Other header files may have 
+  * also defined the types that we need.
+  */
+-#if (!defined(_STDINT_H) && !defined(_UUID_STDINT_H))
++#if (!defined(_STDINT_H) && 0 && !defined(_UUID_STDINT_H) && !defined(_SYS_TYPES_H))
+ #define _UUID_STDINT_H
+ 
+ typedef unsigned char uint8_t;

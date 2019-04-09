@@ -9,3 +9,23 @@
  target_link_libraries(collada-dom ${COLLADA_LIBS})
  set_target_properties(collada-dom PROPERTIES
    COMPILE_FLAGS "${COLLADA_COMPILE_FLAGS}"
+--- libs/collada-dom-2.4.0/dom/external-libs/pcre-8.02/pcrecpp.cc	2019-04-08 22:51:21.755989831 +0200
++++ libs/collada-dom-2.4.0/dom/external-libs/pcre-8.02/pcrecpp.cc	2019-04-08 22:51:38.959983950 +0200
+@@ -816,7 +816,7 @@
+   char* end;
+   errno = 0;
+ #if defined HAVE_STRTOQ
+-  long long r = strtoq(str, &end, radix);
++  long long r = strtoll(str, &end, radix);
+ #elif defined HAVE_STRTOLL
+   long long r = strtoll(str, &end, radix);
+ #elif defined HAVE__STRTOI64
+@@ -848,7 +848,7 @@
+   char* end;
+   errno = 0;
+ #if defined HAVE_STRTOQ
+-  unsigned long long r = strtouq(str, &end, radix);
++  unsigned long long r = strtoull(str, &end, radix);
+ #elif defined HAVE_STRTOLL
+   unsigned long long r = strtoull(str, &end, radix);
+ #elif defined HAVE__STRTOI64

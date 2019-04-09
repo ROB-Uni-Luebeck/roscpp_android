@@ -9,11 +9,13 @@ RUN wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -O - | s
 RUN apt-get update && apt-get install --no-install-recommends -y ros-indigo-ros-base python-wstool
 
 # Install Android NDK
-RUN wget http://dl.google.com/android/ndk/android-ndk-r8e-linux-x86_64.tar.bz2
-RUN tar -jxvf android-ndk-r8e-linux-x86_64.tar.bz2 -C /opt
+# RUN wget http://dl.google.com/android/ndk/android-ndk-r8e-linux-x86_64.tar.bz2
+# RUN wget http://dl.google.com/android/ndk/android-ndk-r10e-linux-x86_64.zip
+RUN wget https://dl.google.com/android/repository/android-ndk-r10e-linux-x86_64.zip
+RUN unzip android-ndk-r10e-linux-x86_64.zip -d /opt
 
 # Set-up environment
-ENV ANDROID_NDK /opt/android-ndk-r8e
+ENV ANDROID_NDK /opt/android-ndk-r10e
 
 # Install g++ to avoid "CMAKE_CXX_COMPILER-NOTFOUND was not found." error
 RUN apt-get update && apt-get install -y g++ cmake make
@@ -37,3 +39,14 @@ ENV USE_CCACHE 1
 ENV NDK_CCACHE /usr/bin/ccache
 ENV CCACHE_DIR /opt/roscpp_output/ccache
 ENV PATH /usr/lib/ccache:$PATH
+
+# fix asm/page.h
+RUN cp /opt/android-ndk-r10e/platforms/android-19/arch-x86/usr/include/asm/page.h /opt/android-ndk-r10e/platforms/android-21/arch-x86_64/usr/include/asm
+RUN cp /opt/android-ndk-r10e/platforms/android-19/arch-x86/usr/include/asm/page_32.h /opt/android-ndk-r10e/platforms/android-21/arch-x86_64/usr/include/asm
+
+# fix lib64 folder
+RUN mv /opt/android-ndk-r10e/platforms/android-21/arch-x86_64/usr/lib /opt/android-ndk-r10e/platforms/android-21/arch-x86_64/usr/lib_x86
+RUN cp /opt/android-ndk-r10e/platforms/android-21/arch-x86_64/usr/lib64 /opt/android-ndk-r10e/platforms/android-21/arch-x86_64/usr/lib -r
+
+# fix timeb header
+RUN cp /opt/android-ndk-r10e/platforms/android-19/arch-x86/usr/include/sys/timeb.h /opt/android-ndk-r10e/platforms/android-21/arch-x86_64/usr/include/sys

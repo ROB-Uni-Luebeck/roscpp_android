@@ -71,3 +71,23 @@
 +  list(APPEND @PKG_NAME@_INCLUDE_DIRS ${${dep}_INCLUDE_DIRS})
 +  list(APPEND @PKG_NAME@_LIBRARIES ${${dep}_LIBRARIES})
 +endforeach()
+--- libs/pcrecpp/pcrecpp.cc	2019-04-08 23:22:07.451599860 +0200
++++ libs/pcrecpp/pcrecpp.cc	2019-04-08 23:22:30.423595579 +0200
+@@ -793,7 +793,7 @@
+   char* end;
+   errno = 0;
+ #if defined HAVE_STRTOQ
+-  long long r = strtoq(str, &end, radix);
++  long long r = strtoll(str, &end, radix);
+ #elif defined HAVE_STRTOLL
+   long long r = strtoll(str, &end, radix);
+ #elif defined HAVE__STRTOI64
+@@ -823,7 +823,7 @@
+   char* end;
+   errno = 0;
+ #if defined HAVE_STRTOQ
+-  unsigned long long r = strtouq(str, &end, radix);
++  unsigned long long r = strtoull(str, &end, radix);
+ #elif defined HAVE_STRTOLL
+   unsigned long long r = strtoull(str, &end, radix);
+ #elif defined HAVE__STRTOI64

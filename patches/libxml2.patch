@@ -35,3 +35,34 @@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hash.Plo@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/legacy.Plo@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/list.Plo@am__quote@
+--- libs/libxml2-2.9.1/glob.c	2019-04-09 07:26:32.952086760 +0200
++++ libs/libxml2-2.9.1/glob.c	2019-04-09 07:27:36.240075388 +0200
+@@ -391,7 +391,7 @@
+ 		 * we're not running setuid or setgid) and then trying
+ 		 * the password file
+ 		 */
+-		if (issetugid() != 0 ||
++		/* if (issetugid() != 0 ||
+ 		    (h = getenv("HOME")) == NULL) {
+ 			if (((h = getlogin()) != NULL &&
+ 			     (pwd = getpwnam(h)) != NULL) ||
+@@ -399,7 +399,7 @@
+ 				h = pwd->pw_dir;
+ 			else
+ 				return pattern;
+-		}
++		} */
+ 	}
+ 	else {
+ 		/*
+--- libs/libxml2-2.9.1/glob.h	2019-04-09 07:26:39.232085631 +0200
++++ libs/libxml2-2.9.1/glob.h	2019-04-09 07:27:54.176072167 +0200
+@@ -37,7 +37,7 @@
+ #define	_GLOB_H_
+ 
+ #include <sys/cdefs.h>
+-#include <sys/_types.h>
++#include <sys/types.h>
+ 
+ #ifndef	_SIZE_T_DECLARED
+ typedef	__size_t	size_t;
